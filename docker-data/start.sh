@@ -1,4 +1,9 @@
 supervisord
 sleep 3
-echo "yes" | ruby /redis/src/redis-trib.rb create --replicas 1 127.0.0.1:7000 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 127.0.0.1:7004 127.0.0.1:7005
+/redis/src/redis-server /redis-conf/7000/redis.conf
+/redis/src/redis-server /redis-conf/7001/redis.conf
+/redis/src/redis-server /redis-conf/7002/redis.conf
+/redis/src/redis-server /redis-conf/7003/redis.conf
+/redis/src/redis-server /redis-conf/7004/redis.conf
+/redis/src/redis-server /redis-conf/7005/redis.conf
 tail -f /var/log/supervisor/redis-1.log
