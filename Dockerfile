@@ -1,11 +1,8 @@
-# This tag use ubuntu 12.04
-FROM phusion/baseimage:0.9.9
+FROM ubuntu:latest
 
-MAINTAINER Johan Grokzen Andersson <Grokzen@gmail.com>
+MAINTAINER Darren Gruber <dgruber@gmail.com>
 
 ENV HOME /root
-
-RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 # Some Environment Variables
 ENV DEBIAN_FRONTEND noninteractive
@@ -19,24 +16,19 @@ ENV LC_ALL     en_US.UTF-8
 RUN apt-get -y update
 RUN apt-get install -y software-properties-common python-software-properties
 
-# Add global apt repos
-RUN add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise universe"
-RUN add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse"
-RUN add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse"
-RUN add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise-backports main restricted universe multiverse"
 RUN apt-get update && apt-get -y upgrade
 
 # Install system dependencies
-RUN apt-get install -y gcc make g++ build-essential libc6-dev tcl git supervisor
+RUN apt-get install -y gcc make g++ build-essential libc6-dev tcl git supervisor wget
 
 # checkout the 3.0 (Cluster support) branch from official repo
-RUN git clone -b 3.0 https://github.com/antirez/redis.git
+RUN wget https://github.com/antirez/redis/archive/2.8.1.tar.gz && tar xfvz 2.8.1.tar.gz
 
 # Build redis from source
-RUN (cd /redis && make)
+RUN (cd /redis-2.8.1 && make)
 
 # Install ruby dependencies so we can bootstrap the cluster via redis-trib.rb
-RUN apt-get -y install ruby rubygems
+RUN apt-get -y install ruby2.0
 RUN gem install redis
 
 # Because Git cannot track empty folders we have to create them manually...
