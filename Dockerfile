@@ -21,7 +21,7 @@ RUN apt-get update && apt-get -y upgrade
 # Install system dependencies
 RUN apt-get install -y gcc make g++ build-essential libc6-dev tcl git supervisor wget
 
-# checkout the 3.0 (Cluster support) branch from official repo
+# Download version 2.8.1 and decompress it
 RUN wget https://github.com/antirez/redis/archive/2.8.1.tar.gz && tar xfvz 2.8.1.tar.gz
 
 # Build redis from source
